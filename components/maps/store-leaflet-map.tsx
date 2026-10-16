@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import L from "leaflet";
 import {
   MapContainer,
@@ -192,12 +192,13 @@ function StoreMapMarker({
   );
 }
 
-export function StoreLeafletMap({
+function StoreLeafletMapCanvas({
   markers,
   className = "",
   singleMarkerId,
   interactive = true,
 }: StoreLeafletMapProps) {
+  const mapInstanceId = useId();
   const visibleMarkers = useMemo(() => {
     if (singleMarkerId) {
       return markers.filter((marker) => marker.storeId === singleMarkerId);
@@ -209,32 +210,61 @@ export function StoreLeafletMap({
     ? ([visibleMarkers[0].lat, visibleMarkers[0].lng] as [number, number])
     : ([20, 0] as [number, number]);
   const defaultZoom = visibleMarkers.length === 1 ? 15 : visibleMarkers.length > 1 ? 12 : 2;
-  const mapKey = visibleMarkers
-    .map((marker) => `${marker.storeId}:${marker.lat},${marker.lng}`)
-    .join("|");
 
   return (
-    <MapContainer
-      key={mapKey}
-      center={defaultCenter}
-      zoom={defaultZoom}
-      scrollWheelZoom={interactive}
-      dragging={interactive}
-      className={`z-0 h-full w-full rounded-2xl ${className}`}
-      aria-label="Store locations map"
-    >
-      <TileLayer
-        attribution={OSM_ATTRIBUTION}
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <FitBounds markers={visibleMarkers} />
-      {visibleMarkers.map((marker) => (
-        <StoreMapMarker
-          key={marker.storeId}
-          marker={marker}
-          interactive={interactive}
+    <div className="h-full min-h-[280px] w-full">
+      <MapContainer
+        key={mapInstanceId}
+        center={defaultCenter}
+        zoom={defaultZoom}
+        scrollWheelZoom={interactive}
+        dragging={interactive}
+        className={`z-0 h-full min-h-[280px] w-full rounded-2xl ${className}`}
+        aria-label="Store locations map"
+      >
+        <TileLayer
+          attribution={OSM_ATTRIBUTION}
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-      ))}
-    </MapContainer>
+        <FitBounds markers={visibleMarkers} />
+        {visibleMarkers.map((marker) => (
+          <StoreMapMarker
+            key={marker.storeId}
+            marker={marker}
+            interactive={interactive}
+          />
+        ))}
+      </MapContainer>
+    </div>
   );
+}
+
+export function StoreLeafletMap(props: StoreLeafletMapProps) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const frameId = window.requestAnimationFrame(() => {
+      if (!cancelled) {
+        setReady(true);
+      }
+    });
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frameId);
+    };
+  }, []);
+
+  if (!ready) {
+    return (
+      <div
+        className="flex h-full min-h-[280px] w-full items-center justify-center bg-surface text-sm text-muted"
+        role="status"
+      >
+        Loading map…
+      </div>
+    );
+  }
+
+  return <StoreLeafletMapCanvas {...props} />;
 }

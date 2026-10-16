@@ -56,3 +56,27 @@ npm run seed:sanity
 - `npm run build` — production-сборка
 - `npm run start` — запуск собранного приложения
 - `npm run lint` — ESLint
+
+## Deploy on Vercel
+
+Production example: [food-rescue-tau-three.vercel.app](https://food-rescue-tau-three.vercel.app/)
+
+In **Vercel → Project → Settings → Environment Variables**, set the same keys as in `.env.example` for **Production** (and Preview if needed):
+
+| Variable | Notes |
+|----------|--------|
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Public |
+| `NEXT_PUBLIC_SANITY_DATASET` | Usually `production` |
+| `NEXT_PUBLIC_SANITY_API_VERSION` | Optional |
+| `SANITY_API_READ_TOKEN` | Server only; Viewer if dataset is private |
+| `SANITY_API_WRITE_TOKEN` | Server only; **required** for register, bookings, seller store/offers |
+| `AUTH_SECRET` | Server only; random string |
+| `AUTH_URL` | e.g. `https://food-rescue-tau-three.vercel.app` (your canonical URL) |
+
+After changing env vars, **redeploy** the project.
+
+In [Sanity manage](https://www.sanity.io/manage) → API → CORS origins, add your Vercel URL (e.g. `https://food-rescue-tau-three.vercel.app`) if Studio or API calls fail from the browser.
+
+Deploy schema changes with `npx sanity schema deploy` (or publish from Studio) so fields like `store.location` exist in production dataset.
+
+**Map on homepage:** markers appear only for stores with valid `location` (geopoint) and bookable offers. Add coordinates in seller dashboard or Studio.
