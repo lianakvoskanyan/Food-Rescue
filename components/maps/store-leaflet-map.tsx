@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import L from "leaflet";
 import {
   MapContainer,
@@ -197,8 +197,8 @@ function StoreLeafletMapCanvas({
   className = "",
   singleMarkerId,
   interactive = true,
-}: StoreLeafletMapProps) {
-  const mapInstanceId = useId();
+  mapKey,
+}: StoreLeafletMapProps & { mapKey: string }) {
   const visibleMarkers = useMemo(() => {
     if (singleMarkerId) {
       return markers.filter((marker) => marker.storeId === singleMarkerId);
@@ -212,9 +212,9 @@ function StoreLeafletMapCanvas({
   const defaultZoom = visibleMarkers.length === 1 ? 15 : visibleMarkers.length > 1 ? 12 : 2;
 
   return (
-    <div className="h-full min-h-[280px] w-full">
+    <div key={mapKey} className="h-full min-h-[280px] w-full">
       <MapContainer
-        key={mapInstanceId}
+        key={mapKey}
         center={defaultCenter}
         zoom={defaultZoom}
         scrollWheelZoom={interactive}
@@ -239,32 +239,37 @@ function StoreLeafletMapCanvas({
   );
 }
 
+function MapLoadingShell() {
+  return (
+    <div
+      className="flex h-full min-h-[280px] w-full items-center justify-center bg-surface text-sm text-muted"
+      role="status"
+    >
+      Loading map…
+    </div>
+  );
+}
+
 export function StoreLeafletMap(props: StoreLeafletMapProps) {
-  const [ready, setReady] = useState(false);
+  const [mapKey, setMapKey] = useState("");
 
   useEffect(() => {
-    let cancelled = false;
-    const frameId = window.requestAnimationFrame(() => {
-      if (!cancelled) {
-        setReady(true);
+    let active = true;
+    const mountTimer = window.setTimeout(() => {
+      if (active) {
+        setMapKey(`map-${Math.random().toString(36).slice(2)}`);
       }
-    });
+    }, 120);
+
     return () => {
-      cancelled = true;
-      window.cancelAnimationFrame(frameId);
+      active = false;
+      window.clearTimeout(mountTimer);
     };
   }, []);
 
-  if (!ready) {
-    return (
-      <div
-        className="flex h-full min-h-[280px] w-full items-center justify-center bg-surface text-sm text-muted"
-        role="status"
-      >
-        Loading map…
-      </div>
-    );
+  if (!mapKey) {
+    return <MapLoadingShell />;
   }
 
-  return <StoreLeafletMapCanvas {...props} />;
+  return <StoreLeafletMapCanvas {...props} mapKey={mapKey} />;
 }

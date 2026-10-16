@@ -1,3 +1,5 @@
+import { normalizeSitePathHref } from "@/lib/nav/normalize-nav-href";
+
 /** Sanity Studio links in header/footer — admin only. */
 export function isStudioNavHref(href: string): boolean {
   const normalized = href.trim();
@@ -16,4 +18,9 @@ export function filterStudioNavLinks<T extends { href: string }>(
     return links;
   }
   return links.filter((link) => !isStudioNavHref(link.href));
+}
+
+/** Logo already links home — hide redundant Home item in the header. */
+export function withoutHomeHeaderLink<T extends { href: string }>(links: T[]): T[] {
+  return links.filter((link) => normalizeSitePathHref(link.href) !== "/");
 }

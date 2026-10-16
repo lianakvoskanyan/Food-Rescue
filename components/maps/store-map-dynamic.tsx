@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import type { StoreMapMarkerData } from "@/lib/stores/map-markers";
 
 function MapLoadingPlaceholder() {
@@ -40,11 +41,14 @@ export function StoreMapDynamic({
   singleMarkerId,
   interactive = true,
 }: StoreMapDynamicProps) {
+  const pathname = usePathname();
+
   return (
     <div
       className={`overflow-hidden rounded-2xl border border-brand/10 ${heightClassName} ${className ?? ""}`}
     >
       <StoreLeafletMap
+        key={pathname}
         markers={markers}
         singleMarkerId={singleMarkerId}
         interactive={interactive}

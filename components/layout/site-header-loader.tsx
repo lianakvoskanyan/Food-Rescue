@@ -1,7 +1,10 @@
 import { SiteHeader } from "@/components/layout/site-header";
 import { getCurrentAuthState } from "@/lib/auth/session";
 import { loadNotificationBellData } from "@/lib/notifications/inbox";
-import { filterStudioNavLinks } from "@/lib/nav/filter-studio-links";
+import {
+  filterStudioNavLinks,
+  withoutHomeHeaderLink,
+} from "@/lib/nav/filter-studio-links";
 import { getSiteSettings } from "@/lib/sanity/fetch";
 import type { SiteSettings } from "@/lib/sanity/types";
 
@@ -25,13 +28,14 @@ export async function SiteHeaderLoader() {
   }
   const isAdmin = auth?.profile.role === "admin";
 
-  const visibleSettings =
-    settings && !isAdmin
-      ? {
-          ...settings,
-          headerLinks: filterStudioNavLinks(settings.headerLinks ?? [], false),
-        }
-      : settings;
+  const visibleSettings = settings
+    ? {
+        ...settings,
+        headerLinks: withoutHomeHeaderLink(
+          filterStudioNavLinks(settings.headerLinks ?? [], isAdmin),
+        ),
+      }
+    : settings;
 
   return (
     <SiteHeader

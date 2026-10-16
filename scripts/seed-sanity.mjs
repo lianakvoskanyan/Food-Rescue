@@ -47,7 +47,6 @@ const seedDocuments = [
     siteTitle: "Food Rescue",
     siteTagline: "Marketplace",
     headerLinks: [
-      { label: "Home", href: "/" },
       { label: "Offers", href: "/offers" },
       { label: "Categories", href: "/#categories" },
     ],
