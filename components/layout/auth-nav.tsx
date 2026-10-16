@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { SiteNavLink } from "@/components/layout/site-nav-link";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NotificationBell } from "@/components/notifications/notification-bell";
 import { ButtonLink } from "@/components/ui/button";
 import type { NotificationBellData } from "@/lib/notifications/inbox";
 import type { AuthState } from "@/lib/auth/types";
-import { normalizeSitePathHref } from "@/lib/nav/normalize-nav-href";
 import type { NavLink } from "@/lib/sanity/types";
 
 type AuthNavProps = {
@@ -34,12 +34,12 @@ export function AuthNavDesktop({ links, auth, notifications }: AuthNavProps) {
         <ul className="flex items-center gap-1">
           {links.map((link, index) => (
             <li key={`${link.href}-${link.label}-${index}`}>
-              <Link
-                href={normalizeSitePathHref(link.href)}
+              <SiteNavLink
+                href={link.href}
                 className="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:bg-brand/8 hover:text-brand-dark"
               >
                 {link.label}
-              </Link>
+              </SiteNavLink>
             </li>
           ))}
         </ul>
@@ -89,13 +89,13 @@ export function AuthNavMobile({ links, auth, notifications, onNavigate }: AuthNa
     <ul className="space-y-3">
       {links.map((link, index) => (
         <li key={`${link.href}-${link.label}-${index}`}>
-          <Link
-            href={normalizeSitePathHref(link.href)}
+          <SiteNavLink
+            href={link.href}
             className="block rounded-xl px-3 py-2 text-sm font-medium text-brand-dark hover:bg-brand/5"
             onClick={onNavigate}
           >
             {link.label}
-          </Link>
+          </SiteNavLink>
         </li>
       ))}
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { toNextLinkHref } from "@/lib/nav/normalize-nav-href";
 
 const baseStyles =
   "inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-[transform,box-shadow,background-color,border-color] duration-200 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
@@ -21,6 +22,8 @@ type ButtonLinkProps = {
   className?: string;
 } & Omit<ComponentProps<typeof Link>, "href" | "className" | "children">;
 
+type AppLinkHref = ComponentProps<typeof Link>["href"];
+
 export function ButtonLink({
   href,
   children,
@@ -28,8 +31,14 @@ export function ButtonLink({
   className = "",
   ...props
 }: ButtonLinkProps) {
+  const linkHref: AppLinkHref = toNextLinkHref(href);
+
   return (
-    <Link href={href} className={`${baseStyles} ${variants[variant]} ${className}`} {...props}>
+    <Link
+      href={linkHref}
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+      {...props}
+    >
       {children}
     </Link>
   );

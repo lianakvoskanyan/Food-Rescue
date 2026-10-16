@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { AuthNavDesktop } from "@/components/layout/auth-nav";
+import { SiteLogoLink } from "@/components/layout/site-logo-link";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import type { NotificationBellData } from "@/lib/notifications/inbox";
 import type { AuthState } from "@/lib/auth/types";
@@ -19,7 +19,7 @@ export function SiteHeader({ settings, auth, notifications }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-50 border-b border-brand/10 bg-surface/75 shadow-[0_8px_30px_-20px_rgba(27,67,50,0.35)] backdrop-blur-xl">
       <div className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="group flex min-w-0 items-center gap-3">
+        <SiteLogoLink className="group flex min-w-0 items-center gap-3">
           <span
             aria-hidden
             className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-brand to-brand-dark text-sm font-bold text-white shadow-md shadow-brand/30 transition-transform group-hover:scale-105"
@@ -35,7 +35,7 @@ export function SiteHeader({ settings, auth, notifications }: SiteHeaderProps) {
               {tagline}
             </span>
           </span>
-        </Link>
+        </SiteLogoLink>
 
         <AuthNavDesktop links={links} auth={auth} notifications={notifications} />
         <MobileNav links={links} auth={auth} notifications={notifications} />

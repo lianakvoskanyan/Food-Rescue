@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { normalizeSitePathHref } from "@/lib/nav/normalize-nav-href";
+import { SiteNavLink } from "@/components/layout/site-nav-link";
 import { Container } from "@/components/ui/container";
 import type { SiteSettings } from "@/lib/sanity/types";
 
@@ -38,12 +37,12 @@ export function SiteFooter({ settings }: SiteFooterProps) {
               <ul className="grid gap-2 sm:grid-cols-2">
                 {links.map((link) => (
                   <li key={`${link.href}-${link.label}`}>
-                    <Link
-                      href={normalizeSitePathHref(link.href)}
+                    <SiteNavLink
+                      href={link.href}
                       className="text-sm text-white/82 transition-colors hover:text-white"
                     >
                       {link.label}
-                    </Link>
+                    </SiteNavLink>
                   </li>
                 ))}
               </ul>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SiteNavLink } from "@/components/layout/site-nav-link";
 import { StoreMapDynamic } from "@/components/maps/store-map-dynamic";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -54,9 +55,12 @@ export function StoresNearbyMapSection({ offers }: StoresNearbyMapSectionProps) 
                   offers catalog
                 </Link>{" "}
                 or see the{" "}
-                <Link href="#stores-heading" className="text-brand underline-offset-2 hover:underline">
+                <SiteNavLink
+                  href="#stores-heading"
+                  className="text-brand underline-offset-2 hover:underline"
+                >
                   store list
-                </Link>{" "}
+                </SiteNavLink>{" "}
                 below. Sellers can add latitude and longitude in the seller
                 dashboard.
               </>
