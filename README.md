@@ -71,7 +71,8 @@ In **Vercel → Project → Settings → Environment Variables**, set the same k
 | `SANITY_API_READ_TOKEN` | Server only; Viewer if dataset is private |
 | `SANITY_API_WRITE_TOKEN` | Server only; **required** for register, bookings, seller store/offers |
 | `AUTH_SECRET` | Server only; random string |
-| `AUTH_URL` | e.g. `https://food-rescue-tau-three.vercel.app` (your canonical URL) |
+| `AUTH_URL` | Canonical URL for Auth.js redirects. **Do not use `localhost` on Production.** If unset or localhost, the app uses `VERCEL_URL` / `NEXT_PUBLIC_SITE_URL`. |
+| `NEXT_PUBLIC_SITE_URL` | Optional; same as public site URL (custom domain) |
 
 After changing env vars, **redeploy** the project.
 

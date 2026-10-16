@@ -3,6 +3,9 @@ import Credentials from "next-auth/providers/credentials";
 import { authConfig } from "@/auth.config";
 import { verifyUserCredentials } from "@/lib/auth/sanity-profile";
 import type { UserRole } from "@/lib/auth/types";
+import { ensureAuthUrlForRuntime } from "@/lib/site/url";
+
+ensureAuthUrlForRuntime();
 
 type CredentialsUser = {
   id: string;

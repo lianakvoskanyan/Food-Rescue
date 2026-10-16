@@ -6,6 +6,7 @@ import { NotificationBell } from "@/components/notifications/notification-bell";
 import { ButtonLink } from "@/components/ui/button";
 import type { NotificationBellData } from "@/lib/notifications/inbox";
 import type { AuthState } from "@/lib/auth/types";
+import { normalizeSitePathHref } from "@/lib/nav/normalize-nav-href";
 import type { NavLink } from "@/lib/sanity/types";
 
 type AuthNavProps = {
@@ -34,7 +35,7 @@ export function AuthNavDesktop({ links, auth, notifications }: AuthNavProps) {
           {links.map((link, index) => (
             <li key={`${link.href}-${link.label}-${index}`}>
               <Link
-                href={link.href}
+                href={normalizeSitePathHref(link.href)}
                 className="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:bg-brand/8 hover:text-brand-dark"
               >
                 {link.label}
@@ -89,7 +90,7 @@ export function AuthNavMobile({ links, auth, notifications, onNavigate }: AuthNa
       {links.map((link, index) => (
         <li key={`${link.href}-${link.label}-${index}`}>
           <Link
-            href={link.href}
+            href={normalizeSitePathHref(link.href)}
             className="block rounded-xl px-3 py-2 text-sm font-medium text-brand-dark hover:bg-brand/5"
             onClick={onNavigate}
           >

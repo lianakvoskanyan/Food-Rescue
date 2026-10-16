@@ -36,6 +36,7 @@ import {
 } from "./queries";
 import { sanityManageClient } from "./manageClient";
 import { isPublicOfferListing } from "./public-offer";
+import { sanitizeSiteSettingsNav } from "@/lib/nav/sanitize-site-settings";
 import { sanityServerClient } from "./serverClient";
 
 export class SanityFetchError extends Error {
@@ -55,10 +56,11 @@ async function fetchFromSanity<T>(label: string, promise: Promise<T>): Promise<T
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
-  return fetchFromSanity(
+  const settings = await fetchFromSanity(
     "getSiteSettings",
     sanityServerClient.fetch<SiteSettings | null>(siteSettingsQuery),
   );
+  return sanitizeSiteSettingsNav(settings);
 }
 
 export async function getPublishedFoodOffers(): Promise<FoodOffer[]> {
@@ -90,7 +92,7 @@ export async function getHomePageData(): Promise<HomePageData> {
     );
 
   return {
-    settings,
+    settings: sanitizeSiteSettingsNav(settings),
     categories,
     stores,
     offers,

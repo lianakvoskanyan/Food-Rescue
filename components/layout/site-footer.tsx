@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { normalizeSitePathHref } from "@/lib/nav/normalize-nav-href";
 import { Container } from "@/components/ui/container";
 import type { SiteSettings } from "@/lib/sanity/types";
 
@@ -38,7 +39,7 @@ export function SiteFooter({ settings }: SiteFooterProps) {
                 {links.map((link) => (
                   <li key={`${link.href}-${link.label}`}>
                     <Link
-                      href={link.href}
+                      href={normalizeSitePathHref(link.href)}
                       className="text-sm text-white/82 transition-colors hover:text-white"
                     >
                       {link.label}
