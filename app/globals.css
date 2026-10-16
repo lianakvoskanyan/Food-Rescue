@@ -1,26 +1,107 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #eef4ef;
+  --foreground: #14281c;
+  --surface: #ffffff;
+  --muted: #5a6b60;
+  --brand: #2a6b4f;
+  --brand-dark: #163d2b;
+  --brand-light: #40916c;
+  --accent: #e9b86d;
+  --accent-soft: #f7ead8;
+  --ring: #95d5b2;
+  --shadow-color: 27 67 50;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-fraunces);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgb(149 213 178 / 0.35), transparent),
+    radial-gradient(circle at 100% 0%, rgb(233 184 109 / 0.12), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgb(42 107 79 / 0.08), transparent 45%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--ring) 55%, white);
+}
+
+@layer components {
+  .site-shell {
+    @apply relative min-h-full;
+  }
+
+  .site-main-glow {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(
+        to bottom,
+        transparent,
+        transparent 60%,
+        color-mix(in srgb, var(--background) 92%, white)
+      );
+  }
+
+  .glass-panel {
+    @apply rounded-3xl border border-white/60 bg-surface/80 shadow-[0_24px_60px_-40px_rgba(27,67,50,0.35)] backdrop-blur-xl;
+  }
+
+  .section-band {
+    @apply border-y border-brand/10 bg-surface/50 backdrop-blur-sm;
+  }
+
+  .text-gradient-brand {
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-light) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Leaflet store map popups */
+.leaflet-store-photo-marker {
+  background: transparent;
+  border: none;
+}
+
+.store-map-leaflet-popup .leaflet-popup-content-wrapper {
+  border-radius: 0.75rem;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 12px 32px -16px rgba(22, 61, 43, 0.45);
+}
+
+.store-map-leaflet-popup .leaflet-popup-content {
+  margin: 0;
+  line-height: 1.4;
+  width: auto !important;
+}
+
+.store-map-leaflet-popup .leaflet-popup-tip {
+  box-shadow: none;
 }
